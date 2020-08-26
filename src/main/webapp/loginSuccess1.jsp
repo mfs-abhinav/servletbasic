@@ -8,18 +8,20 @@
 </head>
 <body>
 <%
+    //allow access only if session exists
+    if(session.getAttribute("user") == null){
+        response.sendRedirect("login.html");
+    }
     String userName = null;
+    String sessionID = session.getId();
     Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-        for (Cookie cookie: cookies) {
-            if (cookie.getName().equals("user")) {
-                userName = cookie.getValue();
-            }
+    if(cookies !=null){
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("user")) userName = cookie.getValue();
         }
     }
-    if (userName == null) response.sendRedirect("login.html");
 %>
-<h3>Hi <%= userName %>, Login successful.</h3>
+<h3>Hi <%= userName %>, Login successful.Session name is <%= (String) session.getAttribute("user") %> <%= sessionID %> </h3>
 
 <br>
 <form action="LogoutServlet" method="post">

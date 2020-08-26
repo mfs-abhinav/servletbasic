@@ -4,9 +4,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -27,11 +29,37 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    // session management using cookie
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        if (getServletConfig().getInitParameter("user").equals(request.getParameter("user"))
+//            && getServletConfig().getInitParameter("password").equals(request.getParameter("pwd"))) {
+//
+//            Cookie loginCookie = new Cookie("user", request.getParameter("user"));
+//            loginCookie.setMaxAge(10);
+//            response.addCookie(loginCookie);
+//            response.sendRedirect("loginSuccess.jsp");
+//        } else {
+//            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
+//            PrintWriter out = response.getWriter();
+//            out.println("<font color=red>Either user name or password is wrong.</font>");
+//            rd.include(request, response);
+//
+//        }
+//    }
+
+    // session management using httpsession
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (getServletConfig().getInitParameter("user").equals(request.getParameter("user"))
-            && getServletConfig().getInitParameter("password").equals(request.getParameter("pwd"))) {
+                && getServletConfig().getInitParameter("password").equals(request.getParameter("pwd"))) {
 
-            response.sendRedirect("loginSuccess.jsp");
+            HttpSession session = request.getSession(true);
+            session.setAttribute("user", "Abhinav");
+            session.setMaxInactiveInterval(100);
+
+            Cookie userName = new Cookie("user", "Banti_Singh");
+            response.addCookie(userName);
+            response.sendRedirect("loginSuccess1.jsp");
+
         } else {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out = response.getWriter();
